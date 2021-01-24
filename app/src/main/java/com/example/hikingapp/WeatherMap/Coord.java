@@ -1,4 +1,4 @@
-package com.example.hikingapp;
+package com.example.hikingapp.WeatherMap;
 
 public class Coord {
     String lon, lat;

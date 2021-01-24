@@ -53,28 +53,47 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteCalendarEvent(events.getEVENT(), events.getDATE(), events.getTIME());
-                Log.d("list", arrayList.toString());
-                arrayList.remove(position);
-                Log.d("list", arrayList.toString());
-                Log.d("myTag", "pred setChanged");
-                notifyDataSetChanged();
-                Log.d("myTag", "posle setChanged");
+                    deleteCalendarEvent(events.getEVENT(), events.getDATE(), events.getTIME());
+                    Log.d("Angela","Lisata pred brisenje:");
+                    Log.d("list", arrayList.toString());
+                    arrayList.remove(position);
+                    Log.d("Angela","Lisata posle brisenje:");
+                    Log.d("list", arrayList.toString());
+                    notifyDataSetChanged();
             }
         });
 
-        /*Log.d("myTag", "pred if else");
+        dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = dbOpenHelper.ReadIDEvents(events.getDATE(), events.getEVENT(), events.getTIME(), database);
+        while (cursor.moveToNext()) {
+            String notify = cursor.getString(cursor.getColumnIndex(DBStructure.Notify));
+            if (notify.equals("on")) {
+                holder.setAlarm.setImageResource(R.drawable.ic_action_notification_on);
+            } else {
+                holder.setAlarm.setImageResource(R.drawable.ic_action_notification_off);
+            }
+        }
+        cursor.close();
+        dbOpenHelper.close();
+/*
+        Log.d("myTag", "pred if else");
         if (isAllarmed(events.getDATE(), events.getEVENT(), events.getTIME())) {
+            Log.d("Angela","Vlaga vo isAllarmed!");
             holder.setAlarm.setImageResource(R.drawable.ic_action_notification_on);
-            Log.d("myTag", "pred");
+            Log.d("myTag", "Ja postavuva slikata: IMA-ALARM");
             notifyDataSetChanged();
-            Log.d("myTag", "posle");
+            Log.d("myTag", "posle DataSetChanged");
         } else {
+            Log.d("Angela","Vlaga vo ELSE (isAllarmed)");
             holder.setAlarm.setImageResource(R.drawable.ic_action_notification_off);
-            Log.d("myTag", "PRED");
+            Log.d("myTag", "Ja postavuva slikata: NEMA-ALARM");
             notifyDataSetChanged();
-            Log.d("myTag", "POSLE");
-        }*/
+            Log.d("myTag", "POSLE DataSetC");
+        }
+
+*/
+
         Calendar dateCalendar = Calendar.getInstance();
         dateCalendar.setTime(convertStringToDate(events.getDATE()));
         final int alamYear = dateCalendar.get(Calendar.YEAR);
@@ -89,11 +108,13 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
             @Override
             public void onClick(View v) {
                 if (isAllarmed(events.getDATE(), events.getEVENT(), events.getTIME())) {
+                    //dokolku imame alarm ako go stisneme kopceto ke se stavi slikicka deka nema alarm i ke se cancel-ne alarmot
                     holder.setAlarm.setImageResource(R.drawable.ic_action_notification_off);
                     cancelAlarm(getReqCode(events.getDATE(),events.getEVENT(),events.getTIME()));
                     updateEvent(events.getDATE(),events.getEVENT(),events.getTIME(),"off");
                     notifyDataSetChanged();
                 } else {
+                    //inaku ke se stavi slikicka deka ima alarm i ke se setira da ima alarm i da stigne notifikacija
                     holder.setAlarm.setImageResource(R.drawable.ic_action_notification_on);
                     Calendar alarmCalendar = Calendar.getInstance();
                     alarmCalendar.set(alamYear,alarmMounth,alamDay,alarmHour,alamMinute);
@@ -105,6 +126,15 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
         });
 
     }
+
+    /*
+    //ako e vekje stignata not:
+    holder.setAlarm.setImageResource(R.drawable.ic_action_notification_off);
+                    cancelAlarm(getReqCode(events.getDATE(),events.getEVENT(),events.getTIME()));
+                    updateEvent(events.getDATE(),events.getEVENT(),events.getTIME(),"off");
+                    notifyDataSetChanged();
+    //
+     */
 
     @Override
     public int getItemCount() {
@@ -130,7 +160,7 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
     private void deleteCalendarEvent(String date, String event, String time) {
         dbOpenHelper = new DBOpenHelper(context);
         SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
-        dbOpenHelper.deleteEvent(event, date, time, database);
+        dbOpenHelper.deleteEvent(date, event, time, database);
         dbOpenHelper.close();
     }
 
@@ -142,8 +172,10 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
         while (cursor.moveToNext()) {
             String notify = cursor.getString(cursor.getColumnIndex(DBStructure.Notify));
             if (notify.equals("on")) {
+                Log.d("Angela","notify==on");
                 alarmed = true;
             } else {
+                Log.d("Angela","notify==off");
                 alarmed = false;
             }
         }

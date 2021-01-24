@@ -1,4 +1,4 @@
-package com.example.hikingapp;
+package com.example.hikingapp.WeatherMap;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.hikingapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

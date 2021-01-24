@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">HikingApp</string>
+
+    <string-array name="song_titles">
+        <item>music1</item>
+        <item>music2</item>
+    </string-array>
+
 </resources>

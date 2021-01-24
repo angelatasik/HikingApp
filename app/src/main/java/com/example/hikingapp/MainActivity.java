@@ -1,15 +1,17 @@
 package com.example.hikingapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.hikingapp.CALENDAR.Calendar;
-import com.example.hikingapp.CALENDAR.CustomCalendarView;
+import com.example.hikingapp.Muzika.Music;
+import com.example.hikingapp.WeatherMap.Vreme;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,13 +19,17 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
+    private ImageButton vreme;
     private Button kontakt;
     private Button raspored;
+    private ImageButton  music;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         viewPager=findViewById(R.id.viewPager);
         ImageAdapter adapter=new ImageAdapter(this);
@@ -40,6 +46,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        music=findViewById(R.id.musicButton);
+        music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMusicActivity();
+            }
+        });
+
+        vreme=findViewById(R.id.button2);
+        vreme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openWeatherActivity();
+            }
+        });
         raspored=findViewById(R.id.raspored);
         raspored.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 openRasporedActivity();
             }
         });
+
     }
 
     public void  openContactActivity(){
@@ -54,8 +76,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void  openMusicActivity(){
+        Intent intent=new Intent(this, Music.class);
+        startActivity(intent);
+    }
+
     public void  openRasporedActivity(){
         Intent intent=new Intent(this, Calendar.class);
+        startActivity(intent);
+    }
+
+    public void  openWeatherActivity(){
+        Intent intent=new Intent(this, Vreme.class);
         startActivity(intent);
     }
 

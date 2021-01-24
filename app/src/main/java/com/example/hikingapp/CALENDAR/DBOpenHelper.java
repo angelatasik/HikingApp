@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -63,6 +64,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
     public void deleteEvent(String event, String date, String time, SQLiteDatabase database){
+        Log.d("a","vlaga vo deleteEvent kaj DBOpenHelper");
         String selection = DBStructure.EVENT+"=? and "+DBStructure.DATE+"=? and "+DBStructure.TIME+"=?";
         String [] selectionArg = {event,date,time};
         database.delete(DBStructure.EVENT_TABLE_NAME,selection,selectionArg);

@@ -9,9 +9,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -65,14 +65,14 @@ public class CustomCalendarView extends LinearLayout {
 
     public CustomCalendarView(final Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.context=context;
+        this.context = context;
         IntializeLayout();
         setUpCalendar();
 
         PreviosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar.add(Calendar.MONTH,-1);
+                calendar.add(Calendar.MONTH, -1);
                 setUpCalendar();
             }
         });
@@ -80,7 +80,7 @@ public class CustomCalendarView extends LinearLayout {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar.add(Calendar.MONTH,1);
+                calendar.add(Calendar.MONTH, 1);
                 setUpCalendar();
             }
         });
@@ -88,11 +88,10 @@ public class CustomCalendarView extends LinearLayout {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,final int position, long id) {
-                AlertDialog.Builder builder=new AlertDialog.Builder(context);
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setCancelable(true);
-                //final View addView = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_newevent_layout,parent,false);
-                View addView = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_newevent_layout,null);
+                View addView = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_newevent_layout, null);
                 final EditText EventName = addView.findViewById(R.id.eventname);
                 final TextView EventTime = addView.findViewById(R.id.eventtime);
                 ImageButton SetTime = addView.findViewById(R.id.seteventtime);
@@ -108,46 +107,44 @@ public class CustomCalendarView extends LinearLayout {
                 SetTime.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Calendar calendar=Calendar.getInstance();
+                        Calendar calendar = Calendar.getInstance();
                         int hours = calendar.get(Calendar.HOUR_OF_DAY);
                         int minuts = calendar.get(Calendar.MINUTE);
-                        TimePickerDialog timePickerDialog=new TimePickerDialog(getContext(), R.style.Theme_AppCompat_Dialog,
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.Theme_AppCompat_Dialog,
                                 new TimePickerDialog.OnTimeSetListener() {
                                     @Override
                                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                         Calendar c = Calendar.getInstance();
-                                        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                                        c.set(Calendar.MINUTE,minute);
+                                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                        c.set(Calendar.MINUTE, minute);
                                         c.setTimeZone(TimeZone.getDefault());
-                                        SimpleDateFormat hformate = new SimpleDateFormat("K:mm a",Locale.ENGLISH);
+                                        SimpleDateFormat hformate = new SimpleDateFormat("K:mm a", Locale.ENGLISH);
                                         String event_Time = hformate.format(c.getTime());
                                         EventTime.setText(event_Time);
                                         alarmHour = c.get(Calendar.HOUR_OF_DAY);
                                         alarmMinute = c.get(Calendar.MINUTE);
                                     }
-                                },hours,minuts,false);
-                                timePickerDialog.show();
+                                }, hours, minuts, false);
+                        timePickerDialog.show();
                     }
                 });
                 final String date = eventDateFormat.format(dates.get(position));
-                final String month=monthFormat.format(dates.get(position));
-                final String year=yearFormat.format(dates.get(position));
+                final String month = monthFormat.format(dates.get(position));
+                final String year = yearFormat.format(dates.get(position));
 
                 AddEvent.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         if (alarmMe.isChecked()) {
-                            SaveEvent(EventName.getText().toString(),EventTime.getText().toString(),date,month,year,"on");
-                            //SaveEvent("test","12:22",date,month,year);
+                            SaveEvent(EventName.getText().toString(), EventTime.getText().toString(), date, month, year, "on");
                             setUpCalendar();
                             Calendar calendar = Calendar.getInstance();
-                            calendar.set(alarmYear,alarmMounth,alarmDay,alarmHour,alarmMinute);
-                            setAlarm(calendar,EventName.getText().toString(),EventTime.getText().toString(),getReqCode(date,EventName.getText().toString(),EventTime.getText().toString()));
+                            calendar.set(alarmYear, alarmMounth, alarmDay, alarmHour, alarmMinute);
+                            setAlarm(calendar, EventName.getText().toString(), EventTime.getText().toString(), getReqCode(date, EventName.getText().toString(), EventTime.getText().toString()));
                             alertDialog.dismiss();
-                        }else {
-                            SaveEvent(EventName.getText().toString(),EventTime.getText().toString(),date,month,year,"off");
-                            //SaveEvent("test","12:22",date,month,year);
+                        } else {
+                            SaveEvent(EventName.getText().toString(), EventTime.getText().toString(), date, month, year, "off");
                             setUpCalendar();
                             alertDialog.dismiss();
                         }
@@ -167,27 +164,31 @@ public class CustomCalendarView extends LinearLayout {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setCancelable(true);
-                View showView = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_events_layout,null);
+                View showView = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_events_layout, null);
                 RecyclerView recyclerView = showView.findViewById(R.id.EventsRV);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(showView.getContext());
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setHasFixedSize(true);
-                EventsRecyclerAdapter eventsRecyclerAdapter = new EventsRecyclerAdapter(showView.getContext(),CollectEventsByDate(date));
+                EventsRecyclerAdapter eventsRecyclerAdapter = new EventsRecyclerAdapter(showView.getContext(), CollectEventsByDate(date));
                 recyclerView.setAdapter(eventsRecyclerAdapter);
                 eventsRecyclerAdapter.notifyDataSetChanged();
 
                 builder.setView(showView);
                 alertDialog = builder.create();
                 alertDialog.show();
+
                 alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
+                        Log.d("Angela","vlaga tuka");
                         setUpCalendar();
+                        Log.d("Angela","stiga i tuka");
                     }
                 });
                 return true;
             }
         });
+
     }
 
     private int getReqCode(String date,String event,String time) {
@@ -204,13 +205,16 @@ public class CustomCalendarView extends LinearLayout {
         return code;
     }
     private void setAlarm(Calendar calendar, String event, String time,int RequestCode) {
+        Log.d("blaa","se postavuva alarm");
         Intent intent = new Intent(context.getApplicationContext(),AlarmReceiver.class);
         intent.putExtra("event",event);
         intent.putExtra("time",time);
         intent.putExtra("id",RequestCode);
+        Log.d("blaa","ispraten intent");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,RequestCode,intent,PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager = (AlarmManager)context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        Log.d("blaa","zavrseno");
     }
     private ArrayList<Events> CollectEventsByDate(String date){
         ArrayList<Events>arrayList = new ArrayList<>();
@@ -239,7 +243,6 @@ public class CustomCalendarView extends LinearLayout {
     private void SaveEvent(String event,String time,String date, String month, String year,String notify){
         dbOpenHelper=new DBOpenHelper(context);
         SQLiteDatabase database = dbOpenHelper.getWritableDatabase();
-        //dbOpenHelper.SaveEvent(event,time,date,month,year,database);
         dbOpenHelper.SaveEvent(event,time,date,month,year,notify,database);
         dbOpenHelper.close();
         Toast.makeText(context,"Event Saved",Toast.LENGTH_SHORT).show();
@@ -261,7 +264,7 @@ public class CustomCalendarView extends LinearLayout {
         dates.clear();
         Calendar monthCalendar = (Calendar)calendar.clone();
         monthCalendar.set(Calendar.DAY_OF_MONTH,1);
-        int FirstDayOfMonth= monthCalendar.get(Calendar.DAY_OF_WEEK)-1;
+        int FirstDayOfMonth = monthCalendar.get(Calendar.DAY_OF_WEEK)-1;
         monthCalendar.add(Calendar.DAY_OF_MONTH,-FirstDayOfMonth);
 
         CollectEventsPerMounth(monthFormat.format(calendar.getTime()),yearFormat.format(calendar.getTime()));
@@ -278,9 +281,7 @@ public class CustomCalendarView extends LinearLayout {
         eventsList.clear();
         dbOpenHelper=new DBOpenHelper(context);
         SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
-        //SQLiteDatabase database=dbOpenHelper.getReadableDatabase();
         Cursor cursor = dbOpenHelper.ReadEventsPerMonth(Month,year,database);
-        //CollectEventsPerMounth(monthFormat.format(calendar.getTime()),yearFormat.format(calendar.getTime()));
 
         while (cursor.moveToNext()) {
             String event = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT));

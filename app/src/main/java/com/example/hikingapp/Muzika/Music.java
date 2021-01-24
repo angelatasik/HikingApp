@@ -1,76 +1,112 @@
-package com.example.hikingapp;
+package com.example.hikingapp.Muzika;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.hikingapp.R;
 
-public class Music extends AppCompatActivity {
+import java.lang.reflect.Field;
 
-    ImageButton play;
-    TextView title;
-    NotificationManager notificationManager;
-    List<Track> tracks;
+public class Music extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    int position;
+    Field[] fields = R.raw.class.getFields();
+    //boolean isPlaying = false;
+
+
+    private String songNames[] = {
+            "song1",
+            "song2",
+    };
+
+    private String ArtistNames[] = {
+            "Artist1",
+            "Artist2"
+    };
+
+
+    private Integer imageid[] = {
+            R.drawable.s1,
+            R.drawable.s2,
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
 
-        play = findViewById(R.id.play);
-        title = findViewById(R.id.title);
 
-        populateTracks();
+        ListView listView = (ListView) findViewById(R.id.listView);
+        listView.setOnItemClickListener(this);
 
-        //Build.VERSION_CODES.Q
-        //.SDK_INT -> verzijata na tel kja so se testira
-        if(Build.VERSION.SDK_INT >= 26) {
-            Log.d("Angela","vlaga tukaaaaaaaaaaaaaa");
-            createChannel();
+
+
+        CustomList customCountryList = new CustomList(this, songNames, ArtistNames, imageid);
+        listView.setAdapter(customCountryList);
+
+    }
+
+    // овој метод се повикува кога ќе се кликне било кој item од ListView
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int index, long id) {
+
+        String filename = fields[index].getName();
+        position = index;
+        //String[] songTitles = getResources().getStringArray(R.array.song_titles);
+        //String title = songTitles[index].toLowerCase().replace(" ", "");
+
+        Intent intent = new Intent(this, MusicService.class);
+        intent.putExtra("title", filename);
+        intent.setAction(MusicService.ACTION_PLAY);
+        startService(intent);
+    }
+
+    // овој метод се повикува кога ќе се кликне копчето STOP
+    public void onClickStop(View view) {
+        Intent intent = new Intent(this, MusicService.class);
+        intent.setAction(MusicService.ACTION_STOP);
+        startService(intent);
+    }
+
+    public void onClickNext(View view) {
+        position++;
+        //position->poslednata pesna od listata, za da ne mi crash-ne ja postavuvam pak na pocetok
+        if(((fields.length)) == position){
+            position = 0;
+            String filename = fields[position].getName();
+            Intent intent = new Intent(this, MusicService.class);
+            intent.putExtra("title", filename);
+            intent.setAction(MusicService.ACTION_NEXT);
+            startService(intent);
+        }else {
+            String filename = fields[position].getName();
+            Intent intent = new Intent(this, MusicService.class);
+            intent.putExtra("title", filename);
+            intent.setAction(MusicService.ACTION_NEXT);
+            startService(intent);
         }
-
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Angela","se klika pause");
-                MusicNotification.createNotification(Music.this, tracks.get(1), R.drawable.ic_pause,
-                        1,tracks.size() -1);
-                Log.d("Angela","let's creat3e not");
-            }
-        });
     }
 
-    private void createChannel() {
-
-        if(Build.VERSION.SDK_INT >= 26)
-        {
-            Log.d("angela","kaj verzija 26");
-            NotificationChannel channel = new NotificationChannel(MusicNotification.CHANNEL_ID,
-                    "KOD DEV", NotificationManager.IMPORTANCE_LOW);
-
-            notificationManager = getSystemService(NotificationManager.class);
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
-
-            }
+    public void onClickPrev(View view) {
+        position--;
+        if (position == -1 ) {
+            position = fields.length - 1;
+            String filename = fields[position].getName();
+            Intent intent = new Intent(this, MusicService.class);
+            intent.putExtra("title", filename);
+            intent.setAction(MusicService.ACTION_PREV);
+            startService(intent);
+        } else {
+            String filename = fields[position].getName();
+            Intent intent = new Intent(this, MusicService.class);
+            intent.putExtra("title", filename);
+            intent.setAction(MusicService.ACTION_PREV);
+            startService(intent);
         }
     }
-    private void populateTracks() {
-        tracks = new ArrayList<>();
-        tracks.add(new Track("Track 1", "Artist 1" , R.drawable.s1));
-        tracks.add(new Track("Track 2", "Artist 2" , R.drawable.s2));
-        tracks.add(new Track("Track 3", "Artist 3" , R.drawable.s3));
-        tracks.add(new Track("Track 4", "Artist 4" , R.drawable.s4));
-    }
-
-
 }

@@ -1,4 +1,4 @@
-package com.example.hikingapp;
+package com.example.hikingapp.WeatherMap;
 
 import android.Manifest;
 import android.content.Context;
@@ -22,6 +22,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.example.hikingapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

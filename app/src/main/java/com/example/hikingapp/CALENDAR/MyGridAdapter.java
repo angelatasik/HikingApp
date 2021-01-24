@@ -2,6 +2,7 @@ package com.example.hikingapp.CALENDAR;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.hikingapp.R;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +47,7 @@ public class MyGridAdapter extends ArrayAdapter {
 
         int DayNo=dateCalendar.get(Calendar.DAY_OF_MONTH);
         int displayMonth=dateCalendar.get(Calendar.MONTH)+1;
+        Log.d("a","displayMont e:" + displayMonth);
         int displayYear=dateCalendar.get(Calendar.YEAR);
         int currentMounth=currentDate.get(Calendar.MONTH)+1;
         int currentYear=currentDate.get(Calendar.YEAR);

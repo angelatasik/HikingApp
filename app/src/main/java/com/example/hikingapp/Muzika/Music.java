@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import java.lang.reflect.Field;
 
 public class Music extends AppCompatActivity implements AdapterView.OnItemClickListener {
     int position;
+    ImageButton stop;
     Field[] fields = R.raw.class.getFields();
     //boolean isPlaying = false;
 
@@ -57,8 +59,8 @@ public class Music extends AppCompatActivity implements AdapterView.OnItemClickL
 
 
 
-        CustomList customCountryList = new CustomList(this, songNames, ArtistNames, imageid);
-        listView.setAdapter(customCountryList);
+        CustomList customList = new CustomList(this, songNames, ArtistNames, imageid);
+        listView.setAdapter(customList);
 
     }
 
@@ -71,6 +73,7 @@ public class Music extends AppCompatActivity implements AdapterView.OnItemClickL
         //String[] songTitles = getResources().getStringArray(R.array.song_titles);
         //String title = songTitles[index].toLowerCase().replace(" ", "");
 
+        
         Intent intent = new Intent(this, MusicService.class);
         intent.putExtra("title", filename);
         intent.setAction(MusicService.ACTION_PLAY);

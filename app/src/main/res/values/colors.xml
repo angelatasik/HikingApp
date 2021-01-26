@@ -5,4 +5,8 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="green">@android:color/holo_green_dark</color>
     <color name="gray">@android:color/darker_gray</color>
+    <color name="dark_green">#29702C</color>
+    <color name="green_dark">#226025</color>
+    <color name="darkgray">#324332</color>
+    <color name="black">#0C0C0C</color>
 </resources>

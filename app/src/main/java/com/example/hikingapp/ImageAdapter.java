@@ -26,7 +26,7 @@ public class ImageAdapter extends PagerAdapter {
         return imageView;
     }
 
-    private  int[] mImageIds= new int[] {R.drawable.sl1,R.drawable.sl2,R.drawable.sl3,R.drawable.sl4,R.drawable.sl5,R.drawable.sl6,R.drawable.sl7,R.drawable.sl8,R.drawable.sl9,R.drawable.sl10};
+    private  int[] mImageIds= new int[] {R.drawable.sl1,R.drawable.sl2,R.drawable.sl3,R.drawable.sl4,R.drawable.sl5,R.drawable.sl6,R.drawable.sl7,R.drawable.sl8,R.drawable.sl9};
 
     ImageAdapter(Context mcontext){
         context=mcontext;

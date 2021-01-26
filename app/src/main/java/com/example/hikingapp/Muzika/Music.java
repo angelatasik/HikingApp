@@ -21,18 +21,29 @@ public class Music extends AppCompatActivity implements AdapterView.OnItemClickL
     private String songNames[] = {
             "song1",
             "song2",
+            "song3",
+            "song4",
+            "song5",
+            "song6"
     };
 
     private String ArtistNames[] = {
             "Artist1",
-            "Artist2"
+            "Artist2",
+            "A3",
+            "a4",
+            "a5",
+            "a6"
     };
 
 
     private Integer imageid[] = {
             R.drawable.s1,
             R.drawable.s2,
-
+            R.drawable.s3,
+            R.drawable.s4,
+            R.drawable.s5,
+            R.drawable.s6
     };
 
     @Override

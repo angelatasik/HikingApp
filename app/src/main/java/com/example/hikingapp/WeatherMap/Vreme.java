@@ -61,7 +61,7 @@ public class Vreme extends AppCompatActivity implements View.OnClickListener {
             Weather weather = new Weather();
             message = autoComplete.getText().toString();
             String content = weather.execute("https://api.openweathermap.org/data/2.5/weather?q=" +
-                    message+"&appid=36ad2dffe12f87973bd32d47d7980e75").get();
+                    message+"&units=metric&appid=36ad2dffe12f87973bd32d47d7980e75").get();
             JSONObject object = new JSONObject(content);
             String coord =  object.getString("coord");
             JSONObject coordPart = new JSONObject(coord);
@@ -103,7 +103,7 @@ public class Vreme extends AppCompatActivity implements View.OnClickListener {
 
         try {
             content = weather.execute("https://api.openweathermap.org/data/2.5/weather?lat=" +
-                    latitude+"&lon=" + longitude + "&appid=36ad2dffe12f87973bd32d47d7980e75").get();
+                    latitude+"&lon=" + longitude + "&units=metric&appid=36ad2dffe12f87973bd32d47d7980e75").get();
             JSONObject object = new JSONObject(content);
             String weatherData = object.getString("weather"); //WEATHER
             String mainTemperature = object.getString("main"); // MAIN
@@ -257,7 +257,7 @@ public class Vreme extends AppCompatActivity implements View.OnClickListener {
         Weather weather = new Weather();
         try {
             content = weather.execute("https://api.openweathermap.org/data/2.5/weather?q=" +
-                    written+"&appid=36ad2dffe12f87973bd32d47d7980e75").get();
+                    written+"&units=metric&appid=36ad2dffe12f87973bd32d47d7980e75").get();
             JSONObject object = new JSONObject(content);
             String weatherData = object.getString("weather");
             String mainTemperature = object.getString("main");

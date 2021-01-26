@@ -30,10 +30,10 @@ public class Music extends AppCompatActivity implements AdapterView.OnItemClickL
     private String ArtistNames[] = {
             "Artist1",
             "Artist2",
-            "A3",
-            "a4",
-            "a5",
-            "a6"
+            "Artist3",
+            "Artist4",
+            "Artist5",
+            "Artist6"
     };
 
 

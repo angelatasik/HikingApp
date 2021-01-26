@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +24,7 @@ public class Contact extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:075378566"));
+                intent.setData(Uri.parse("tel:079877785"));
                 startActivity(intent);
 
             }
